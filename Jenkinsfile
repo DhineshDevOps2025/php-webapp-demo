@@ -4,8 +4,13 @@ pipeline {
  stage('Install Puppet Agent') {
  steps {
  echo 'Simulating Puppet agent installation...'
- // On a real Linux server, you might use:
- // sh 'sudo apt-get update && sudo apt-get install -y puppet-agent'
+ }
+ }
+ stage('Install Docker with Ansible') {
+ steps {
+ echo 'Simulating Docker installation with Ansible...'
+ // In a real setup, you might use:
+ // sh 'ansible-playbook -i inventory install_docker.yml'
  }
  }
  stage('Test') {
