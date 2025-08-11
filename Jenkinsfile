@@ -9,8 +9,18 @@ pipeline {
  stage('Install Docker with Ansible') {
  steps {
  echo 'Simulating Docker installation with Ansible...'
- // In a real setup, you might use:
- // sh 'ansible-playbook -i inventory install_docker.yml'
+ }
+ }
+ stage('Build and Deploy PHP Docker Container') {
+ steps {
+ script {
+ echo 'Building Docker image...'
+ sh 'docker build -t php-webapp-demo .'
+ echo 'Running Docker container...'
+ // Stop and remove any existing container with the same name
+ sh 'docker rm -f php-webapp-demo || true'
+ sh 'docker run -d --name php-webapp-demo -p 8080:80 php-webapp-demo'
+ }
  }
  }
  stage('Test') {
