@@ -15,11 +15,11 @@ pipeline {
  steps {
  script {
  echo 'Building Docker image...'
- sh 'docker build -t php-webapp-demo .'
+ sh '/usr/local/bin/docker build -t php-webapp-demo .'
+ echo 'Removing any existing container...'
+ sh '/usr/local/bin/docker rm -f php-webapp-demo || true'
  echo 'Running Docker container...'
- // Stop and remove any existing container with the same name
- sh 'docker rm -f php-webapp-demo || true'
- sh 'docker run -d --name php-webapp-demo -p 8080:80 php-webapp-demo'
+ sh '/usr/local/bin/docker run -d --name php-webapp-demo -p 8080:80 php-webapp-demo'
  }
  }
  }
@@ -27,6 +27,12 @@ pipeline {
  steps {
  echo 'Jenkins successfully pulled code from GitHub!'
  }
+ }
+ }
+ post {
+ failure {
+ echo 'Build failed! Cleaning up Docker container if it exists...'
+ sh '/usr/local/bin/docker rm -f php-webapp-demo || true'
  }
  }
 }
